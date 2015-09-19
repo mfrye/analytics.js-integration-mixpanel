@@ -329,6 +329,12 @@ describe('Mixpanel', function() {
         analytics.called(window.mixpanel.people.set, { friend: 'elmo' });
       });
 
+      it('should include special traits in people properties if present', function() {
+        mixpanel.options.people = true;
+        analytics.track('event', { friend: 'elmo', email: 'elmo@sesa.me' }, { Mixpanel: { peopleProperties: ['friend'] } });
+        analytics.called(window.mixpanel.people.set, { friend: 'elmo', $email: 'elmo@sesa.me' });
+      });
+
       it('shouldn\'t try to register super properties if not specified', function() {
         analytics.track('event', { friend: 'elmo' }, {});
         analytics.didNotCall(window.mixpanel.register);
